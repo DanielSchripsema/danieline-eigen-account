@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  # API - API
+  DevOps:
+    build:
+      context: /devops
+      dockerfile: Dockerfile
+    ports:
+      - "12345:3000"
+    environment:
+      - MONGO_USERNAME=DanielIne
+      - MONGO_PASSWORD=DanielIne123
+      - MONGO_URL=mongodb://mongo:27017/mongodb4devopsapi
+    volumes:
+      - ./devops:/app
+    depends_on:
+      - mongo
+
+  # Database - Mongo DB
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: DanielIne
+      MONGO_INITDB_ROOT_PASSWORD: DanielIne123
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./database:/data/db
