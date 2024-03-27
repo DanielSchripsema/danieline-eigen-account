@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  mongodb:
+    image: mongo
+    hostname: mongo-database
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    restart: on-failure
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./database:/data/db
+
+  api:
+    depends_on:
+      - mongodb
+    build: 
+      context: /api
+      dockerfile: /Dockerfile
+    container_name: api
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URL: mongodb://root:example@mongo-database:27017/admin
+      MONGO_HOST: mongo-database
+      MONGO_PORT: 27017
+      MONGO_USERNAME: root
+      MONGO_PASSWORD: example
