@@ -15,7 +15,9 @@ permissions: read-all
 jobs:
   testen:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./api
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,7 +28,7 @@ jobs:
           npm install
           npm test
 
-      # - name: Jest coverage report
-      #   uses: ArtiomTr/jest-coverage-report-action@v2
-      #   with:
-      #       working-directory: ./api
+      - name: Jest coverage report
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+            working-directory: ./api
