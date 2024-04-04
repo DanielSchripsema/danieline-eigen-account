@@ -1,8 +1,10 @@
-name: 'coverage'
+name: API Build and Test
+
 on:
+  workflow_dispatch:
   push:
     branches:
-      - api/**
+      - main
   pull_request:
     branches:
       - main
