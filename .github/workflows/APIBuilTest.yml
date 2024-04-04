@@ -26,7 +26,7 @@ jobs:
           npm install
           npm test
 
-      - name: Jest coverage report
-        uses: ArtiomTr/jest-coverage-report-action@v2
-        with:
-            working-directory: ./api
+      # - name: Jest coverage report
+      #   uses: ArtiomTr/jest-coverage-report-action@v2
+      #   with:
+      #       working-directory: ./api
