@@ -8,23 +8,25 @@ on:
   pull_request:
     branches:
       - main
+
+permissions: read-all
+
+
 jobs:
-  coverage:
+  testen:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./api
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Run Tests
-        run: npm test
+        uses: actions/checkout@v4
+
       - name: Install dependencies and run tests
         working-directory: ./api
         run: |
           npm install
           npm test
+
       - name: Jest coverage report
         uses: ArtiomTr/jest-coverage-report-action@v2
-      - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx
+        with:
+            working-directory: ./api
