@@ -1,31 +1,26 @@
-name: API Build and Test
+name: Run Tests and Generate Coverage Report
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
 
 jobs:
-  testen:
+  coverage:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./api 
     steps:
-      - uses: actions/checkout@v4
-
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Install dependencies
         run: npm install
-        working-directory: ./api
-
-      - name: Run tests
+      - name: Run Tests
         run: npm test
-        working-directory: ./api
-
       - name: Jest coverage report
         uses: ArtiomTr/jest-coverage-report-action@v2
+
 
 
   # production-deploy:
