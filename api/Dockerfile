@@ -13,6 +13,7 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+
 # Expose port 3000cd
 ENV PORT=3000
 EXPOSE $PORT
