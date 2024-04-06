@@ -1,0 +1,1 @@
+[![coverage](https://github.com/DanielSchripsema/danieline-eigen-account/actions/workflows/APIBuilTest.yml/badge.svg?branch=main)](https://github.com/DanielSchripsema/danieline-eigen-account/actions/workflows/APIBuilTest.yml)
