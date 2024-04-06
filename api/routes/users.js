@@ -16,4 +16,10 @@ router.post('/', (req, res) => {
     .catch((err) => res.status(500).json(err));
 });
 
+router.get('/slow', (req, res, next) => {
+  setTimeout(() => {
+    res.send('Slowly respond with a resource');
+  }, 3000);
+});
+
 module.exports = router;
