@@ -1,0 +1,28 @@
+groups:
+  - name: DemoAlerts
+    rules:
+      - alert: "On api down"
+        expr: up{job="api"} < 1
+        for: 30s
+      - alert: "API Slow"
+        expr: http_request_duration_seconds_sum{job="api", path="/users/slow"} > 2
+        for: 20s
+  - name: deadman.rules
+    rules:
+    - alert: deadman
+      expr: vector(1)
+      for: 10s
+      labels:
+        severity: Critical
+      annotations:
+        message: Dummy Check
+        summary: This is a dummy check meant to ensure that the entire lerting pipeline is functional.
+  - name: pod.rules
+    rules:
+    - alert: PodLimit
+      expr: kubelet_running_pods > 0
+      for: 15m
+      labels:
+        severity: High
+      annotations:
+        message: 'Kubelet {{$labels.instance}} is running {{$value}} pods.'

@@ -1,22 +1,63 @@
 version: '3'
 
 services:
-  mongo-database:
+  messagebus:
+    image: rabbitmq:3.13
+    container_name: messagebus
+    hostname: "messagebus"
+    labels:
+      NAME: "messagebus"
+    ports:
+      - "4369:4369"
+      - "5671:5671"
+      - "5672:5672" # Default RabbitMQ Port
+      - "25672:25672"
+      - "15671:15671"
+      - "15672:15672" # Management UI
+    volumes:
+      - "./data:/var/lib/rabbitmq"
+
+  logging:
+    build: ./LoggingAPI
+    environment:
+      MESSAGE_QUEUE: amqp://messagebus
+    volumes:
+      - ./database/data:/data
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - messagebus
+      - mongodb
+
+  web:
+    build: ./Server
+    ports:
+      - 3001:3000
+    environment:
+      MESSAGE_QUEUE: amqp://messagebus
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - messagebus
+      
+  mongodb:
     image: mongo
-    hostname: mongo-database
+    hostname: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_PASSWORD: password12345
     restart: on-failure
     ports:
       - "27017:27017"
     volumes:
       - ./database:/data/db
-    container_name: mongo-database
+    container_name: mongodb
 
   api:
     depends_on:
-      - mongo-database
+      - mongodb
     build: 
       context: /api
       dockerfile: /Dockerfile
@@ -24,8 +65,40 @@ services:
     ports:
       - "3000:3000"
     environment:
-      MONGO_URL: mongodb://root:example@mongo-database:27017/admin
-      MONGO_HOST: mongo-database
+      MONGO_URL: mongodb://root:password12345@mongodb:27017/admin
+      MONGO_HOST: mongodb
       MONGO_PORT: 27017
       MONGO_USERNAME: root
-      MONGO_PASSWORD: example
+      MONGO_PASSWORD: password12345
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    ports:
+      # - 80:9090 # production
+      - 9090:9090 # development
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    depends_on:
+      - mongodb
+      - db-exporter
+
+  grafana:
+    build: ./grafana
+    ports:
+      # - 80:3000 # production
+      - 3002:3000 # development
+    depends_on:
+      - prometheus
+
+  db-exporter:
+    image: bitnami/mongodb-exporter
+    container_name: db-exporter
+    environment:
+      MONGODB_URI: "mongodb://root:password12345@mongodb:27017/admin" 
+    depends_on:
+      - mongodb
+
+volumes:
+  prometheus-data:
