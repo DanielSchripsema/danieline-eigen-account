@@ -41,29 +41,3 @@ block content
           messages.appendChild(item);
           window.scrollTo(0, document.body.scrollHeight);
       });
-      y
-        h1 Note Page
-        form(action="/send", method="post")
-            textarea(name="note", rows="5" cols="50")
-            br
-            button(type="submit") Send
-
-    //-   html
-    //- head
-    //-     title Note Page
-    //-     //- script(src="/socket.io/socket.io.js")
-    //-     script.
-    //-         //- var socket = io();
-    //-         //- socket.on('message', function(message) {
-    //-         //-     var li = document.createElement('li');
-    //-         //-     li.textContent = message;
-    //-         //-     document.getElementById('messages').appendChild(li);
-    //-         //- });
-    //- body
-    //-     h1 Note Page
-    //-     form(action="/send", method="post")
-    //-         textarea(name="note", rows="5" cols="50")
-    //-         br
-    //-         button(type="submit") Send
-    //-     h2 Messages
-    //-     ul#messages

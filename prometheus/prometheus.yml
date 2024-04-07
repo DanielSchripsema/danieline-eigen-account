@@ -11,12 +11,20 @@ scrape_configs:
     static_configs:
       - targets: ["api:3000"]
 
+  - job_name: "web"
+    static_configs:
+      - targets: ["web:3001"]
+
+  - job_name: "messagebus"
+    static_configs:
+      - targets: ["messagebus:5672", "messagebus:15672"]
+
   - job_name: "mongodb"
     static_configs:
       - targets: ["db-exporter:9216"]
 
-alerting:
-  alertmanagers:
-    - static_configs:
-      - targets:
-        - prometheus-alertmanager:80
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#       - targets:
+#         - prometheus-alertmanager:80
