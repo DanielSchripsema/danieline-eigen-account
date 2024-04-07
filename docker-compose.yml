@@ -77,8 +77,8 @@ services:
       - ./prometheus:/etc/prometheus
       - prometheus-data:/prometheus
     ports:
-      - 80:9090 # production
-      # - 9090:9090 # development
+      # - 80:9090 # production
+      - 9090:9090 # development
     command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
     depends_on:
       - mongodb
@@ -87,8 +87,8 @@ services:
   grafana:
     build: ./grafana
     ports:
-      - 80:3000 # production
-      # - 3002:3000 # development
+      # - 80:3000 # production
+      - 3002:3000 # development
     depends_on:
       - prometheus
 
